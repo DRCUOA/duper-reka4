@@ -45,6 +45,7 @@ export class Running extends State {
         this.game.player.frameY = 3;
     }
     handleInput(input){
+        this.game.particles.push(new Dust(this.game, this.game.player.x + this.game.player.width * .65, this.game.player.y + this.game.player.height));
         if(input.includes('ArrowDown')){
             this.game.player.setState(states.SITTING, 0);
         } else if (input.includes('ArrowUp')){
@@ -60,10 +61,10 @@ export class Jumping extends State {
         super('JUMPING', game);
     }
     enter(){
-        if(this.game.player.onGround()) this.    player.vy -= 27;
-        this.player.frameX = 0;
-        this.player.maxFrame = 6;
-        this.player.frameY = 1;
+        if(this.game.player.onGround()) this.game.player.vy -= 27;
+        this.game.player.frameX = 0;
+        this.game.player.maxFrame = 6;
+        this.game.player.frameY = 1;
     }
     handleInput(input){
         if(this.game.player.vy > this.game.player.weight){
@@ -91,7 +92,7 @@ export class Falling extends State {
 }
 
 export class Rolling extends State {
-    constructor(player, game){
+    constructor(game){
         super('ROLLING', game);
     }
     enter(){
