@@ -7,7 +7,7 @@ import { UI } from "./UI.js";
 window.addEventListener('load', function () {
   const canvas = document.querySelector('#canvas1');
   const ctx = canvas.getContext('2d');
-  canvas.width = 500;
+  canvas.width = 1700;
   canvas.height = 500;
 
   class Game {
@@ -23,6 +23,7 @@ window.addEventListener('load', function () {
       this.UI = new UI(this);
       this.enemies = [];
       this.particles = [];
+      this.maxParticles = 50;
       this.enemyTimer = 0;
       this.enemyInterval = 1000;  // speed of adding enemies
       this.debug = true;
@@ -50,8 +51,12 @@ window.addEventListener('load', function () {
         particle.update();
         if (particle.markedForDeletion) this.particles.splice(index, 1);
       })
-      if(this.particles.length > 0) console.log(this.particles)
+      if(this.particles.length > this.maxParticles) {
+        this.particles = this.particles.slice(0 , 50);
+      }
+      console.log(this.particles.length)
     }
+    
     draw(context) {
       this.background.draw(context);
       this.player.draw(context);
