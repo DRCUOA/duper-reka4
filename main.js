@@ -6,7 +6,7 @@ import { FlyingEnemy, ClimbingEnemy, GroundEnemy } from "./enemies.js"
 window.addEventListener('load', function () {
   const canvas = document.querySelector('#canvas1');
   const ctx = canvas.getContext('2d');
-  canvas.width = 1500;
+  canvas.width = 500;
   canvas.height = 500;
 
   class Game {
@@ -48,8 +48,11 @@ window.addEventListener('load', function () {
 
     }
     addEnemy(){
+      if(this.speed > 0 && Math.random() < 0.5) this.enemies.push(new GroundEnemy(this));
+      else if(this.speed > 0) this.enemies.push(new ClimbingEnemy(this));
       this.enemies.push(new FlyingEnemy(this));
       console.log(this.enemies);
+
     }
   }
 
