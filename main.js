@@ -7,7 +7,7 @@ import { UI } from "./UI.js";
 window.addEventListener('load', function () {
   const canvas = document.querySelector('#canvas1');
   const ctx = canvas.getContext('2d');
-  canvas.width = 1700;
+  canvas.width = 800;
   canvas.height = 500;
 
   class Game {
@@ -26,7 +26,7 @@ window.addEventListener('load', function () {
       this.maxParticles = 50;
       this.enemyTimer = 0;
       this.enemyInterval = 1000;  // speed of adding enemies
-      this.debug = true;
+      this.debug = false;
       this.score = 0;
       this.fontColour = 'red';
       this.player.currentState = this.player.states[0];
