@@ -30,7 +30,7 @@ export class UI {
             if (this.game.score > this.game.winningScore) {
                 context.fillText('Boo-ya-ka', this.game.width * 0.5, this.game.height * 0.5 - 20);
                 context.font = this.fontSize * 0.7 + 'px ' + this.fontFamily;
-                context.fillText('Creatures of the night are scared of one thing - YOU !!!', this.game.width * 0.5, this.game.height * 0.5 + 20);
+                context.fillText('Creatures of the night are scared of YOU !!!', this.game.width * 0.5, this.game.height * 0.5 + 20);
             } else
                 context.fillText('Love at first bite ?', this.game.width * 0.5, this.game.height * 0.5 - 20);
             context.font = this.fontSize * 0.7 + 'px ' + this.fontFamily;
