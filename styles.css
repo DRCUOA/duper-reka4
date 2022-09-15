@@ -10,8 +10,9 @@
   top:50%;
   left:50%;
   transform: translate(-50%, -50%); 
+  font-family: 'Creepster', cursive;
 }
 
-#player, #layer1, #layer2, #layer3, #layer4, #layer5, #enemy_fly, #enemy_plant, #enemy_spider_big, #fire, #boom  {
+#player, #layer1, #layer2, #layer3, #layer4, #layer5, #enemy_fly, #enemy_plant, #enemy_spider_big, #fire, #boom, #lives {
   display: none;
 }

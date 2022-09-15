@@ -1,5 +1,6 @@
 import { Sitting, Running, Jumping, Falling, Rolling, Diving, Hit } from "./playerStates.js";
 import { CollisionAnimation } from "./collisionAnimation.js";
+import { FloatingMessage } from "./floatingMessages.js";
 
 export class Player {
   constructor(game) {
@@ -9,7 +10,6 @@ export class Player {
     this.weight = 1; // weight and vy change in the update function are the 
     this.x = 0;
     this.y = this.game.height - this.height - this.game.groundMargin;
-    
     this.vy = 0; // vertical velocity
     this.image = document.querySelector('#player');
     this.frameX = 0;
@@ -21,15 +21,15 @@ export class Player {
     this.speed = 0;
     this.maxSpeed = 10;
     this.states = [new Sitting(this.game), new Running(this.game), new Jumping(this.game), new Falling(this.game), new Rolling(this.game), new Diving(this.game), new Hit(this.game)];
-   
+    this.currentState = null;
   }
   update(input, deltaTime) {
     this.checkCollisions()
     this.currentState.handleInput(input);
     // horizontal movement
     this.x += this.speed;
-    if (input.includes('ArrowRight')) this.speed = this.maxSpeed;
-    else if (input.includes('ArrowLeft')) this.speed = -this.maxSpeed;
+    if (input.includes('ArrowRight') && this.currentState !== this.states[6]) this.speed = this.maxSpeed;
+    else if (input.includes('ArrowLeft') && this.currentState !== this.states[6]) this.speed = -this.maxSpeed;
     else this.speed = 0;
     // horizontal boundaries
     if (this.x < 0) this.x = 0;
@@ -39,7 +39,7 @@ export class Player {
     if (!this.onGround()) this.vy += this.weight;
     else this.vy = 0;
     // vertical boundaries
-    if(this.y > this.game.height - this.height - this.game.groundMargin) this.y = this.game.height - this.height - this.game.groundMargin;
+    if (this.y > this.game.height - this.height - this.game.groundMargin) this.y = this.game.height - this.height - this.game.groundMargin;
     // sprite animation
     if (this.frameTimer > this.frameInterval) {
       this.frameTimer = 0;
@@ -50,7 +50,7 @@ export class Player {
     }
   }
   draw(context) {
-    if(this.game.debug) context.strokeRect(this.x, this.y, this.width, this.height);
+    if (this.game.debug) context.strokeRect(this.x, this.y, this.width, this.height);
     context.drawImage(this.image, this.frameX * this.width, this.frameY * this.height, this.width, this.height, this.x, this.y, this.width, this.height);
   }
   onGround() {
@@ -61,22 +61,26 @@ export class Player {
     this.game.speed = this.game.maxSpeed * speed;
     this.currentState.enter();
   }
-  checkCollisions(){
+  checkCollisions() {
     this.game.enemies.forEach(enemy => {
-      if(
+      if (
         enemy.x < this.x + this.width &&
         enemy.x + enemy.width > this.x &&
         enemy.y < this.y + this.height &&
         enemy.y + enemy.height > this.y
-        ){ 
-          enemy.markedForDeletion = true;
-          this.game.collisions.push(new CollisionAnimation(this.game, enemy.x + enemy.width * 0.5, enemy.y + enemy.height * 0.5))
-          if(this.currentState === this.states[4] || this.currentState === this.states[5]) {
-            this.game.score++;
-          } else {
-            this.setState(6,0);
-          }
-        } 
+      ) {
+        enemy.markedForDeletion = true;
+        this.game.collisions.push(new CollisionAnimation(this.game, enemy.x + enemy.width * 0.5, enemy.y + enemy.height * 0.5))
+        if (this.currentState === this.states[4] || this.currentState === this.states[5]) {
+          this.game.score++;
+          this.game.floatingMessages.push(new FloatingMessage('+1', enemy.x, enemy.y, 0, 0))
+        } else {
+          this.setState(6, 0);
+          this.game.score -= 1;
+          this.game.lives--;
+          if (this.game.lives <= 0) this.game.gameOver = true;
+        }
+      }
     })
   }
 } 
